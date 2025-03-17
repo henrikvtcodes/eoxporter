@@ -6,9 +6,9 @@ type VersionCollector struct {
 	InternalVersion  string  `json:"internalVersion"`
 	SystemMacAddress string  `json:"systemMacAddress"`
 	SerialNumber     string  `json:"serialNumber"`
-	BootupTimestamp  int64   `json:"bootupTimestamp"`
-	MemTotal         int64   `json:"memTotal"`
-	MemFree          int64   `json:"memFree"`
+	BootupTimestamp  int     `json:"bootupTimestamp"`
+	MemTotal         int     `json:"memTotal"`
+	MemFree          int     `json:"memFree"`
 	Version          string  `json:"version"`
 	Architecture     string  `json:"architecture"`
 	IsIntlVersion    bool    `json:"isIntlVersion"`
