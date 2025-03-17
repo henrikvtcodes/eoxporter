@@ -12,6 +12,7 @@
       systems = [ "x86_64-linux" "aarch64-darwin" ];
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         packages.default = pkgs.callPackage ./eoxporter.nix { };
+        packages.eoxporter = self'.packages.default;
       };
 
     };
