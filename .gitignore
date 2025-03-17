@@ -9,6 +9,7 @@
 *.so
 *.dylib
 eoxporter
+result
 
 # Test binary, built with `go test -c`
 *.test
@@ -17,7 +18,7 @@ eoxporter
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 
 # Go workspace file
 go.work
