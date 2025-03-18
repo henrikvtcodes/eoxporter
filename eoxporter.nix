@@ -10,11 +10,13 @@ buildGoModule rec {
 
   src = ./.;
   doCheck = false;
+  proxyVendor = true;
 
-#  preBuild = ''
-#  export GOPROXY='https://proxy.golang.org,direct'
-#  ${pkgs.go}/bin/go mod vendor
-#  '';
+  preBuild = ''
+    export GOPROXY='https://proxy.golang.org,direct'
+    ${pkgs.go}/bin/go mod tidy
+    ${pkgs.go}/bin/go mod vendor
+  '';
 
   vendorHash = "sha256-R7dBP5kR+oRypF2ppCF5CrZiqNzKmQZPxQ3ycQbxjq0=";
   # vendorHash = lib.fakeHash;
