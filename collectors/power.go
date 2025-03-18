@@ -1,5 +1,7 @@
 package collectors
 
+import "github.com/prometheus/client_golang/prometheus"
+
 type PowerCollector struct {
 	PowerSupplies map[string]PowerSupply `json:"powerSupplies"`
 }
@@ -29,4 +31,12 @@ type TempSensor struct {
 
 func (c *PowerCollector) GetCmd() string {
 	return "show environment power"
+}
+
+func (c *PowerCollector) Register(registry *prometheus.Registry) {
+
+}
+
+func (c *PowerCollector) UpdateMetrics() {
+
 }

@@ -1,5 +1,7 @@
 package collectors
 
+import "github.com/prometheus/client_golang/prometheus"
+
 type TemperatureCollector struct {
 	ShutdownOnOverheat bool                `json:"shutdownOnOverheat"`
 	SystemStatus       string              `json:"systemStatus"`
@@ -31,4 +33,12 @@ type TemperatureSensor struct {
 
 func (c *TemperatureCollector) GetCmd() string {
 	return "show environment temperature"
+}
+
+func (c *TemperatureCollector) Register(registry *prometheus.Registry) {
+
+}
+
+func (c *TemperatureCollector) UpdateMetrics() {
+
 }

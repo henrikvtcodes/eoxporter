@@ -1,5 +1,7 @@
 package collectors
 
+import "github.com/prometheus/client_golang/prometheus"
+
 type InterfacesCollector struct {
 	Interfaces map[string]Interface `json:"interfaces"`
 }
@@ -22,4 +24,12 @@ func (c *InterfacesCollector) GetCmd() string {
 	// In the context of eAPI, this command seems to return the output of "show interfaces counters incoming"
 	// and show interfaces counters outgoing" (and the outgoing command does the same)
 	return "show interfaces counters incoming"
+}
+
+func (c *InterfacesCollector) Register(registry *prometheus.Registry) {
+
+}
+
+func (c *InterfacesCollector) UpdateMetrics() {
+
 }

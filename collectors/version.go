@@ -1,5 +1,7 @@
 package collectors
 
+import "github.com/prometheus/client_golang/prometheus"
+
 type VersionCollector struct {
 	Uptime           float64 `json:"uptime"`
 	ModelName        string  `json:"modelName"`
@@ -14,8 +16,19 @@ type VersionCollector struct {
 	IsIntlVersion    bool    `json:"isIntlVersion"`
 	InternalBuildId  string  `json:"internalBuildId"`
 	HardwareRevision string  `json:"hardwareRevision"`
+
+	unameInfo *prometheus.GaugeVec
+	uptime    *prometheus.Gauge
 }
 
 func (c *VersionCollector) GetCmd() string {
 	return "show version"
+}
+
+func (c *VersionCollector) Register(registry *prometheus.Registry) {
+
+}
+
+func (c *VersionCollector) UpdateMetrics() {
+
 }

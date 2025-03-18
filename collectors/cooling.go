@@ -1,5 +1,7 @@
 package collectors
 
+import "github.com/prometheus/client_golang/prometheus"
+
 type CoolingCollector struct {
 	OverrideFanSpeed           int       `json:"overrideFanSpeed"`
 	CoolingMode                string    `json:"coolingMode"`
@@ -30,4 +32,12 @@ type FanStatus struct {
 
 func (c *CoolingCollector) GetCmd() string {
 	return "show environment cooling"
+}
+
+func (c *CoolingCollector) Register(registry *prometheus.Registry) {
+
+}
+
+func (c *CoolingCollector) UpdateMetrics() {
+
 }
