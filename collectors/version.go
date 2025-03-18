@@ -16,6 +16,6 @@ type VersionCollector struct {
 	HardwareRevision string  `json:"hardwareRevision"`
 }
 
-func (s *VersionCollector) GetCmd() string {
+func (c *VersionCollector) GetCmd() string {
 	return "show version"
 }

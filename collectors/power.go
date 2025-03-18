@@ -27,6 +27,6 @@ type TempSensor struct {
 	Temperature int    `json:"temperature"`
 }
 
-func (s *PowerCollector) GetCmd() string {
+func (c *PowerCollector) GetCmd() string {
 	return "show environment power"
 }

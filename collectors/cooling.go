@@ -28,6 +28,6 @@ type FanStatus struct {
 	LastSpeedStableChangeTime float64 `json:"lastSpeedStableChangeTime"`
 }
 
-func (s *CoolingCollector) GetCmd() string {
+func (c *CoolingCollector) GetCmd() string {
 	return "show environment cooling"
 }
