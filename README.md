@@ -1,6 +1,6 @@
 # eoxporter
 
-A basic Prometheus exporter for Arista devices. 
+A basic Prometheus exporter for Arista EOS devices. 
 
 ## Usage
 
