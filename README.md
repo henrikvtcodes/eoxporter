@@ -2,6 +2,26 @@
 
 A basic Prometheus exporter for Arista devices. 
 
+## Usage
+
+### Create a view-only user to collect eAPI data
+In the interest of security, it is best to create a user for this collector that cannot make changes to the device configuration.
+You can use the following commands:
+```shell
+# Log into your switch (or whatever device)
+
+enable # Enter priveledged mode
+configure terminal 
+
+username monitor secret monitor # Creates a user `monitor` whos password is `monitor`
+write # copy the running config to startup
+
+exit
+exit
+
+# Logout
+```
+See the `eapi.ini` file in this repository to get an idea how this is configured.
 
 ## Developing
 
