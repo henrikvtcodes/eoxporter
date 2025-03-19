@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
+	"maps"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,12 +19,13 @@ import (
 const DefaultCollectors = "version,cooling,power,temperature"
 
 var (
-	eapiConfigPath           = flag.String("eapi-config", os.Getenv("EAPI_CONF"), "Path to Arista eAPI config file")
+	eapiConfigPath           = flag.String("eapi-conf", os.Getenv("EAPI_CONF"), "Path to Arista eAPI config file")
 	defaultCollectorsEnabled = flag.String("collectors", DefaultCollectors, "Comma-separated list of collectors to enable")
 	listenAddress            = flag.String("listen-address", "0.0.0.0:9396", "Address to listen on for HTTP")
 )
 
 func main() {
+	// Parse CLI flags
 	flag.Parse()
 
 	// Handle eAPI Config Path Loading
@@ -32,11 +34,15 @@ func main() {
 		println(fmt.Errorf("invalid eapiConfig path: %s", eapiAbsoluteConfigPath))
 		panic(err)
 	}
+	log.Default().Printf("Loading configuration from %s\n", eapiAbsoluteConfigPath)
 	goeapi.LoadConfig(eapiAbsoluteConfigPath)
+	log.Default().Printf("Valid Targets: %s", strings.Join(goeapi.Connections(), " "))
 
 	// Handle enabled eAPI Collectors
 	defaultCollectors := makeCollectors(strings.Split(*defaultCollectorsEnabled, ","))
+	log.Default().Printf("Default collectors: %v\n", strings.Join(slices.Collect(maps.Keys(defaultCollectors)), " "))
 
+	// Metrics function
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
 		MetricsHandler(w, r, &defaultCollectors)
 	})
@@ -104,6 +110,8 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 		return
 	}
 
+	// Spit out some logs to the console
+	log.Default().Printf("Inbound request for target %v\n", target)
 	// Initialize eAPI Handle
 	node, err := goeapi.ConnectTo(target)
 	if err != nil {
@@ -122,10 +130,13 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 	if len(collectorNames) > 0 {
 		collectorMap = makeCollectors(collectorNames)
 	}
+	log.Default().Printf("Collectors enabled: %v\n", strings.Join(slices.Collect(maps.Keys(collectorMap)), " "))
 
+	// Specific metrics registry to handle this request
 	aristaRegistry := prometheus.NewRegistry()
 
 	// Register prometheus metrics and eAPI commands
+	log.Default().Print("Attempting to register collectors")
 	for name, coll := range collectorMap {
 		coll.Register(aristaRegistry)
 		if aErr := eapiHandle.AddCommand(coll); aErr != nil {
@@ -137,13 +148,16 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 	// Get data from switch
 	if cErr := eapiHandle.Call(); cErr != nil {
 		http.Error(w, "Failed to run Arista eAPI Command", http.StatusInternalServerError)
+		log.Default().Printf("eAPI Command Failed: %e", cErr)
 		return
 	}
+	log.Default().Println("eAPI command(s) ran successfully")
 
 	// Update metrics
 	for _, coll := range collectorMap {
 		coll.Register(aristaRegistry)
 	}
+	log.Default().Println("Metrics updated")
 
 	// Do the HTTP thing
 	metricsHandler := promhttp.HandlerFor(aristaRegistry, promhttp.HandlerOpts{})
