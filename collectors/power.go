@@ -10,6 +10,7 @@ type PowerCollector struct {
 
 	psuMeta          *prometheus.GaugeVec
 	psuUptime        *prometheus.GaugeVec
+	psuCapacity      *prometheus.GaugeVec
 	psuInputCurrent  *prometheus.GaugeVec
 	psuOutputCurrent *prometheus.GaugeVec
 	psuOutputPower   *prometheus.GaugeVec
@@ -48,16 +49,19 @@ func (c *PowerCollector) Register(registry *prometheus.Registry) {
 	// PSU Meta Gauge (serves to provide information that might be useful on dashboards
 	c.psuMeta = prometheus.NewGaugeVec(psuOpts("meta", "Provides meta-info about each power supply unit. The gauge value can be 0 or 1, where 1 is set when the PSU State is OK"),
 		[]string{"psuId", "model", "capacity", "managed"})
+	defaultLabels := []string{"psuId"}
+	// PSU Capacity Gauge
+	c.psuCapacity = prometheus.NewGaugeVec(psuOpts("capacity", "Power Supply Capacity, in Watts"), defaultLabels)
 	// PSU Uptime Gauge
 	c.psuUptime = prometheus.NewGaugeVec(psuOpts("uptime", "PSU Uptime"),
-		[]string{"psuId"})
+		defaultLabels)
 	// Input/Output current gauges
 	c.psuInputCurrent = prometheus.NewGaugeVec(psuOpts("current_in", "Input Current from wall in AC amps"),
-		[]string{"psuId"})
+		defaultLabels)
 	c.psuOutputCurrent = prometheus.NewGaugeVec(psuOpts("current_out", "Output Current to device in DC amps "),
-		[]string{"psuId"})
+		defaultLabels)
 	c.psuOutputPower = prometheus.NewGaugeVec(psuOpts("power", "Power consumption in watts"),
-		[]string{"psuId"})
+		defaultLabels)
 
 	// Register all metrics
 	registry.MustRegister(c.psuMeta, c.psuUptime, c.psuInputCurrent, c.psuOutputCurrent, c.psuOutputPower)
@@ -71,6 +75,9 @@ func (c *PowerCollector) UpdateMetrics() {
 		} else {
 			c.psuMeta.WithLabelValues(id, psu.ModelName, strconv.Itoa(psu.Capacity), strconv.FormatBool(psu.Managed)).Set(1)
 		}
+
+		// PSU Capacity
+		c.psuCapacity.WithLabelValues(id).Set(float64(psu.Capacity))
 
 		// PSU Uptime
 		c.psuUptime.WithLabelValues(id).Set(psu.Uptime)
