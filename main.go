@@ -112,6 +112,7 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 
 	// Spit out some logs to the console
 	log.Default().Printf("Inbound request for target %v\n", target)
+
 	// Initialize eAPI Handle
 	node, err := goeapi.ConnectTo(target)
 	if err != nil {
@@ -126,8 +127,10 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 
 	// Figure out which collectors need to handle this request
 	collectorMap := *defaultCollectors
-	collectorNames := strings.Split(params.Get("collectors"), ",")
-	if len(collectorNames) > 0 {
+	collectorsParam := params.Get("collectors")
+	collectorNames := strings.Split(collectorsParam, ",")
+	if len(collectorNames) > 0 && collectorNames[0] != "" {
+		log.Default().Printf("Using non-default collectors\n")
 		collectorMap = makeCollectors(collectorNames)
 	}
 	log.Default().Printf("Collectors enabled: %v\n", strings.Join(slices.Collect(maps.Keys(collectorMap)), " "))
