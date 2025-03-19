@@ -6,6 +6,7 @@ type TemperatureCollector struct {
 	ShutdownOnOverheat bool                `json:"shutdownOnOverheat"`
 	SystemStatus       string              `json:"systemStatus"`
 	TemperatureSensors []TemperatureSensor `json:"tempSensors"`
+	PowerSupplySlots   []PSUSlot           `json:"powerSupplySlots"`
 }
 
 type PSUSlot struct {
