@@ -1,0 +1,42 @@
+schema = 3
+
+[mod]
+  [mod."github.com/aristanetworks/goeapi"]
+    version = "v1.0.0"
+    hash = "sha256-FrPjEAGJYzUUxhEpubMHpKJSbprjC/hkul8VnRVH54k="
+  [mod."github.com/beorn7/perks"]
+    version = "v1.0.1"
+    hash = "sha256-h75GUqfwJKngCJQVE5Ao5wnO3cfKD9lSIteoLp/3xJ4="
+  [mod."github.com/cespare/xxhash/v2"]
+    version = "v2.3.0"
+    hash = "sha256-7hRlwSR+fos1kx4VZmJ/7snR7zHh8ZFKX+qqqqGcQpY="
+  [mod."github.com/klauspost/compress"]
+    version = "v1.17.11"
+    hash = "sha256-LFSIWy0C4VbiuPve0eKHr7Q7s4XtaGzsZ3qpO+6bEgc="
+  [mod."github.com/mitchellh/mapstructure"]
+    version = "v1.5.0"
+    hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="
+  [mod."github.com/munnerz/goautoneg"]
+    version = "v0.0.0-20191010083416-a7dc8b61c822"
+    hash = "sha256-79URDDFenmGc9JZu+5AXHToMrtTREHb3BC84b/gym9Q="
+  [mod."github.com/prometheus/client_golang"]
+    version = "v1.21.1"
+    hash = "sha256-YS9Nt52p6iF9+6oOnft9rqKvycqctdj/VTqLvYTNW0A="
+  [mod."github.com/prometheus/client_model"]
+    version = "v0.6.1"
+    hash = "sha256-rIDyUzNfxRA934PIoySR0EhuBbZVRK/25Jlc/r8WODw="
+  [mod."github.com/prometheus/common"]
+    version = "v0.62.0"
+    hash = "sha256-UFccvzMJaBrUpnqVgZgohRcgk5SKMi/UJnXNtazCnx8="
+  [mod."github.com/prometheus/procfs"]
+    version = "v0.15.1"
+    hash = "sha256-H+WXJemFFwdoglmD6p7JRjrJJZmIVAmJwYmLbZ8Q9sw="
+  [mod."github.com/vaughan0/go-ini"]
+    version = "v0.0.0-20130923145212-a98ad7ee00ec"
+    hash = "sha256-yjElTSfiuMNUYBL7ZInt6/XWidRclZlaAkDHz0bUMdA="
+  [mod."golang.org/x/sys"]
+    version = "v0.28.0"
+    hash = "sha256-kzSlDo5FKsQU9cLefIt2dueGUfz9XuEW+mGSGlPATGc="
+  [mod."google.golang.org/protobuf"]
+    version = "v1.36.1"
+    hash = "sha256-qGWEeb6fd16uATHuJ5mDdZKUKnHwKOeneJ6mXEv3prQ="
