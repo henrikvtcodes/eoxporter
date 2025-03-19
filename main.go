@@ -66,6 +66,8 @@ func makeCollectors(collectorNames []string) map[string]Collector {
 		switch strings.ToLower(collectorName) {
 		default:
 			log.Default().Printf("[WARN] Invalid Collector %s", collectorName)
+		case "default":
+			log.Default().Printf("[INFO] Including Default Collectors")
 		case "version":
 			if collectorMap["version"] == nil {
 				collectorMap["version"] = &collectors.VersionCollector{}
@@ -90,10 +92,27 @@ func makeCollectors(collectorNames []string) map[string]Collector {
 			} else {
 				log.Default().Printf("[WARN] Duplicate collector: temperature")
 			}
+		case "interfaces":
+			if collectorMap["interfaces"] == nil {
+				collectorMap["interfaces"] = &collectors.InterfacesCollector{}
+			} else {
+				log.Default().Printf("[WARN] Duplicate collector: interfaces")
+			}
 		}
 
 	}
 	return collectorMap
+}
+
+func mergeCollectors(cMap1 map[string]Collector, cMap2 map[string]Collector) map[string]Collector {
+	cMapMerged := make(map[string]Collector)
+	for name, coll := range cMap1 {
+		cMapMerged[name] = coll
+	}
+	for name, coll := range cMap2 {
+		cMapMerged[name] = coll
+	}
+	return cMapMerged
 }
 
 func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *map[string]Collector) {
@@ -130,8 +149,13 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 	collectorsParam := params.Get("collectors")
 	collectorNames := strings.Split(collectorsParam, ",")
 	if len(collectorNames) > 0 && collectorNames[0] != "" {
-		log.Default().Printf("Using non-default collectors\n")
-		collectorMap = makeCollectors(collectorNames)
+		if strings.Contains(collectorsParam, "default") {
+			log.Default().Printf("Merging default collectors with requested ones\n")
+			collectorMap = mergeCollectors(collectorMap, makeCollectors(collectorNames))
+		} else {
+			log.Default().Printf("Using non-default collectors\n")
+			collectorMap = makeCollectors(collectorNames)
+		}
 	}
 	log.Default().Printf("Collectors enabled: %v\n", strings.Join(slices.Collect(maps.Keys(collectorMap)), " "))
 
