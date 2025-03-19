@@ -155,7 +155,7 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 
 	// Update metrics
 	for _, coll := range collectorMap {
-		coll.Register(aristaRegistry)
+		coll.UpdateMetrics()
 	}
 	log.Default().Println("Metrics updated")
 
