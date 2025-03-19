@@ -18,6 +18,7 @@ buildGoModule rec {
     ${pkgs.go}/bin/go mod vendor
   '';
 
-  vendorHash = "sha256-R7dBP5kR+oRypF2ppCF5CrZiqNzKmQZPxQ3ycQbxjq0=";
+#  vendorHash = "sha256-R7dBP5kR+oRypF2ppCF5CrZiqNzKmQZPxQ3ycQbxjq0=";
+vendorHash = null;  
   # vendorHash = lib.fakeHash;
 }
