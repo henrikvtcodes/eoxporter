@@ -114,6 +114,23 @@ scrape_configs:
     scrape_interval: 15s
 ```
 
+## Roadmap
+
+### Support more metrics collectors
+
+_Open to contributions only if the contributor can test on an actual arista device._
+
+I currently run an Arista DCS-7050TX-64 and that is what I am using to test. In the future I would like to add collectors for MLAG and other things, but I want to
+actually set that stuff up on my switch so that I can test my metrics implementation with actual data from a real device.
+
+### More robust logging and CLI parsing
+
+I am currently using the Go std library for flags and logging right now but they aren't great.
+
+### Utilize switch extensions to run on Arista devices directly
+
+I know this is theoretically possible and it would be cool to collect metrics directly from the device but there's some experimentation to be done with how eAPI would work there (sockets?)
+
 ## Credits
 
 - https://github.com/aristanetworks/goeapi
