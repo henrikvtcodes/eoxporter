@@ -4,6 +4,17 @@ A basic Prometheus exporter for Arista EOS devices.
 
 ## Usage
 
+```
+usage: eoxporter [<flags>]
+
+Flags:
+  --[no-]help                Show context-sensitive help (also try --help-long and --help-man).
+  --eapiConf="~/.eapi.conf"    Path to Arista eAPI config file. If the flag isn't provided, $EAPI_CONF is checked
+  --collectors="version,cooling,power,temperature"
+                             Comma-separated list of collectors to enable
+  --listen="localhost:9396"  Address to listen on for HTTP
+```
+
 ### Create a view-only user to collect eAPI data
 
 In the interest of security, it is best to create a user for this collector that cannot make changes to the device configuration.
@@ -47,11 +58,11 @@ See the [`eapi.ini`](#prometheus--eapi-example-config) file in this repository t
 **Collector Configuration**
 All configuration can be supplied using CLI flags. None are required unless otherwise specified
 
-| Flag              | Format                    | Default                             | notes                                                                               |
-|-------------------|---------------------------|-------------------------------------|-------------------------------------------------------------------------------------|
-| `-collectors`     | comma separated list      | `version,cooling,power,temperature` | the metrics that should be provided if the request lacks a `collectors` query param |
-| `-eapi-conf`      | Relative or Absolute path | if no flag, `$EAPI_CONF` is checked | Required in flag or env form                                                        |
-| `-listen-address` | `address:port` format     | `0.0.0.0:9396`                      |                                                                                     |
+| Flag           | Format                    | Default                             | notes                                                                               |
+|----------------|---------------------------|-------------------------------------|-------------------------------------------------------------------------------------|
+| `--collectors` | comma separated list      | `version,cooling,power,temperature` | the metrics that should be provided if the request lacks a `collectors` query param |
+| `-eapiConf`    | Relative or Absolute path | if no flag, `$EAPI_CONF` is checked | Required in flag or env form                                                        |
+| `--listen`     | `address:port` format     | `localhost:9396`                    |                                                                                     |
 
 **Valid Collectors**
 
