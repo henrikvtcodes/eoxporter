@@ -13,6 +13,12 @@ schema = 3
   [mod."github.com/klauspost/compress"]
     version = "v1.17.11"
     hash = "sha256-LFSIWy0C4VbiuPve0eKHr7Q7s4XtaGzsZ3qpO+6bEgc="
+  [mod."github.com/mattn/go-colorable"]
+    version = "v0.1.13"
+    hash = "sha256-qb3Qbo0CELGRIzvw7NVM1g/aayaz4Tguppk9MD2/OI8="
+  [mod."github.com/mattn/go-isatty"]
+    version = "v0.0.19"
+    hash = "sha256-wYQqGxeqV3Elkmn26Md8mKZ/viw598R4Ych3vtt72YE="
   [mod."github.com/mitchellh/mapstructure"]
     version = "v1.5.0"
     hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="
@@ -31,6 +37,9 @@ schema = 3
   [mod."github.com/prometheus/procfs"]
     version = "v0.15.1"
     hash = "sha256-H+WXJemFFwdoglmD6p7JRjrJJZmIVAmJwYmLbZ8Q9sw="
+  [mod."github.com/rs/zerolog"]
+    version = "v1.34.0"
+    hash = "sha256-M503WwzPvqbOas3f70FQNXoWG17eV/XU6FubtB6P0uo="
   [mod."github.com/vaughan0/go-ini"]
     version = "v0.0.0-20130923145212-a98ad7ee00ec"
     hash = "sha256-yjElTSfiuMNUYBL7ZInt6/XWidRclZlaAkDHz0bUMdA="
