@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/aristanetworks/goeapi"
 	"github.com/henrikvtcodes/eoxporter/collectors"
+	"github.com/henrikvtcodes/eoxporter/util"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
@@ -31,16 +32,15 @@ func main() {
 	// Handle eAPI Config Path Loading
 	eapiAbsoluteConfigPath, err := filepath.Abs(*eapiConfigPath)
 	if err != nil {
-		println(fmt.Errorf("invalid eapiConfig path: %s", eapiAbsoluteConfigPath))
-		panic(err)
+		util.Logger.Fatal().Err(err).Str("path", *eapiConfigPath).Msgf("Invalid eapiConfig Path: %s", eapiAbsoluteConfigPath)
 	}
-	log.Default().Printf("Loading configuration from %s\n", eapiAbsoluteConfigPath)
+	util.Logger.Info().Msgf("Loading configuration from %s", eapiAbsoluteConfigPath)
 	goeapi.LoadConfig(eapiAbsoluteConfigPath)
-	log.Default().Printf("Valid Targets: %s", strings.Join(goeapi.Connections(), " "))
+	util.Logger.Info().Msgf("Valid Targets: %s", strings.Join(goeapi.Connections(), " "))
 
 	// Handle enabled eAPI Collectors
 	defaultCollectors := makeCollectors(strings.Split(*defaultCollectorsEnabled, ","))
-	log.Default().Printf("Default collectors: %v\n", strings.Join(slices.Collect(maps.Keys(defaultCollectors)), " "))
+	util.Logger.Info().Msgf("Default collectors: %v\n", strings.Join(slices.Collect(maps.Keys(defaultCollectors)), " "))
 
 	// Metrics function
 	http.HandleFunc("/metrics", func(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +50,7 @@ func main() {
 	// Handle HTTP requests
 	servErr := http.ListenAndServe(*listenAddress, nil)
 	if servErr != nil {
-		log.Default().Fatalf("[FATAL] HTTP Server Error: %s", err)
+		util.Logger.Fatal().Err(servErr).Msg("Error running HTTP server")
 	}
 }
 
@@ -65,38 +65,40 @@ func makeCollectors(collectorNames []string) map[string]Collector {
 	for _, collectorName := range collectorNames {
 		switch strings.ToLower(collectorName) {
 		default:
-			log.Default().Printf("[WARN] Invalid Collector %s", collectorName)
+			util.Logger.Warn().Msgf("Invalid Collector %s", collectorName)
 		case "default":
-			log.Default().Printf("[INFO] Including Default Collectors")
+			util.Logger.Info().Msgf("Including Default Collectors")
 		case "version":
 			if collectorMap["version"] == nil {
 				collectorMap["version"] = &collectors.VersionCollector{}
 			} else {
-				log.Default().Printf("[WARN] Duplicate collector: version")
+				util.Logger.Warn().Msgf("Duplicate collector detected: %s", "version")
 			}
 		case "cooling":
 			if collectorMap["cooling"] == nil {
 				collectorMap["cooling"] = &collectors.CoolingCollector{}
 			} else {
-				log.Default().Printf("[WARN] Duplicate collector: cooling")
+				util.Logger.Warn().Msgf("Duplicate collector detected: %s", "cooling")
+
 			}
 		case "power":
 			if collectorMap["power"] == nil {
 				collectorMap["power"] = &collectors.PowerCollector{}
 			} else {
-				log.Default().Printf("[WARN] Duplicate collector: power")
+				util.Logger.Warn().Msgf("Duplicate collector detected: %s", "power")
 			}
 		case "temperature":
 			if collectorMap["temperature"] == nil {
 				collectorMap["temperature"] = &collectors.TemperatureCollector{}
 			} else {
-				log.Default().Printf("[WARN] Duplicate collector: temperature")
+				util.Logger.Warn().Msgf("Duplicate collector detected: %s", "temperature")
+
 			}
 		case "interfaces":
 			if collectorMap["interfaces"] == nil {
 				collectorMap["interfaces"] = &collectors.InterfacesCollector{}
 			} else {
-				log.Default().Printf("[WARN] Duplicate collector: interfaces")
+				util.Logger.Warn().Msgf("Duplicate collector detected: %s", "interfaces")
 			}
 		}
 
@@ -150,23 +152,24 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 	collectorNames := strings.Split(collectorsParam, ",")
 	if len(collectorNames) > 0 && collectorNames[0] != "" {
 		if strings.Contains(collectorsParam, "default") {
-			log.Default().Printf("Merging default collectors with requested ones\n")
+			util.Logger.Info().Msgf("Merging default collectors with target param")
 			collectorMap = mergeCollectors(collectorMap, makeCollectors(collectorNames))
 		} else {
-			log.Default().Printf("Using non-default collectors\n")
+			util.Logger.Info().Msgf("Using non-default collectors")
 			collectorMap = makeCollectors(collectorNames)
 		}
 	}
-	log.Default().Printf("Collectors enabled: %v\n", strings.Join(slices.Collect(maps.Keys(collectorMap)), " "))
+	util.Logger.Info().Msgf("Collectors enabled: %v\n", strings.Join(slices.Collect(maps.Keys(collectorMap)), " "))
 
 	// Specific metrics registry to handle this request
 	aristaRegistry := prometheus.NewRegistry()
 
 	// Register prometheus metrics and eAPI commands
-	log.Default().Print("Attempting to register collectors")
+	util.Logger.Info().Msgf("Attempting to register collectors with Prometheus and eAPI")
 	for name, coll := range collectorMap {
 		coll.Register(aristaRegistry)
 		if aErr := eapiHandle.AddCommand(coll); aErr != nil {
+			util.Logger.Error().Err(aErr).Msgf("Failed to add command for collector %s", name)
 			http.Error(w, fmt.Sprintf("Failed to add command for collector %s", name), http.StatusInternalServerError)
 			return
 		}
@@ -175,16 +178,16 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request, defaultCollectors *m
 	// Get data from switch
 	if cErr := eapiHandle.Call(); cErr != nil {
 		http.Error(w, "Failed to run Arista eAPI Command", http.StatusInternalServerError)
-		log.Default().Printf("eAPI Command Failed: %e", cErr)
+		util.Logger.Error().Err(cErr).Msgf("Arista eAPI Command call Failed")
 		return
 	}
-	log.Default().Println("eAPI command(s) ran successfully")
+	util.Logger.Info().Msg("Arista eAPI Command(s) ran successfully")
 
 	// Update metrics
 	for _, coll := range collectorMap {
 		coll.UpdateMetrics()
 	}
-	log.Default().Println("Metrics updated")
+	util.Logger.Info().Msg("Prometheus Metrics Updated")
 
 	// Do the HTTP thing
 	metricsHandler := promhttp.HandlerFor(aristaRegistry, promhttp.HandlerOpts{})
