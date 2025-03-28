@@ -48,7 +48,7 @@ See the [`eapi.ini`](#prometheus--eapi-example-config) file in this repository t
 All configuration can be supplied using CLI flags. None are required unless otherwise specified
 
 | Flag              | Format                    | Default                             | notes                                                                               |
-| ----------------- | ------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+|-------------------|---------------------------|-------------------------------------|-------------------------------------------------------------------------------------|
 | `-collectors`     | comma separated list      | `version,cooling,power,temperature` | the metrics that should be provided if the request lacks a `collectors` query param |
 | `-eapi-conf`      | Relative or Absolute path | if no flag, `$EAPI_CONF` is checked | Required in flag or env form                                                        |
 | `-listen-address` | `address:port` format     | `0.0.0.0:9396`                      |                                                                                     |
@@ -129,7 +129,18 @@ I am currently using the Go std library for flags and logging right now but they
 
 ### Utilize switch extensions to run on Arista devices directly
 
-I know this is theoretically possible and it would be cool to collect metrics directly from the device but there's some experimentation to be done with how eAPI would work there (sockets?)
+I think this is theoretically possible and it would be cool to collect metrics directly from the device but there's some experimentation to be done with how eAPI would work there (sockets?)
+
+## Developing & Building
+
+### Building the nix package with `gomod2nix`
+The tool `gomod2nix` is used because there are some weird issues with the Nixpkgs standard way of building Go modules; 
+particularly centered around hashing of dependencies and whatnot. `gomod2nix` consumes the `go.mod` and `go.sum` files to 
+create a file containing the versions and hashing of Go dependencies in a format that Nix can understand.
+
+**TL;DR: Whenever dependencies change in any way, the `gomod2nix.toml` file must be regenerated.**
+
+The default dev shell defined by this flake contains the tool to do this; it is simply the command `gomod2nix`.
 
 ## Credits
 
