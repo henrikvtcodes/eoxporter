@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/aristanetworks/goeapi"
 	"github.com/henrikvtcodes/eoxporter/collectors"
 	"github.com/henrikvtcodes/eoxporter/util"
@@ -20,14 +20,14 @@ import (
 const DefaultCollectors = "version,cooling,power,temperature"
 
 var (
-	eapiConfigPath           = flag.String("eapi-conf", os.Getenv("EAPI_CONF"), "Path to Arista eAPI config file")
-	defaultCollectorsEnabled = flag.String("collectors", DefaultCollectors, "Comma-separated list of collectors to enable")
-	listenAddress            = flag.String("listen-address", "0.0.0.0:9396", "Address to listen on for HTTP")
+	eapiConfigPath           = kingpin.Flag("eapiConf", "Path to Arista eAPI config file. If the flag isn't provided, $EAPI_CONF is checked").Default(os.Getenv("EAPI_CONF")).String()
+	defaultCollectorsEnabled = kingpin.Flag("collectors", "Comma-separated list of collectors to enable").Default(DefaultCollectors).String()
+	listenAddress            = kingpin.Flag("listen", "Address to listen on for HTTP").Default("localhost:9396").String()
 )
 
 func main() {
 	// Parse CLI flags
-	flag.Parse()
+	kingpin.Parse()
 
 	// Handle eAPI Config Path Loading
 	eapiAbsoluteConfigPath, err := filepath.Abs(*eapiConfigPath)
