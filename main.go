@@ -5,6 +5,7 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/aristanetworks/goeapi"
 	"github.com/gofiber/contrib/fiberzerolog"
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/henrikvtcodes/eoxporter/collectors"
 	"github.com/henrikvtcodes/eoxporter/util"
@@ -17,8 +18,6 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 const DefaultCollectors = "version,cooling,power,temperature"
