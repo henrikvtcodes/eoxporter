@@ -7,6 +7,9 @@ schema = 3
   [mod."github.com/alecthomas/units"]
     version = "v0.0.0-20211218093645-b94a6e3cc137"
     hash = "sha256-uriYmwxT69xbmWKO/5OAyeMa2lFBOJDrU2KtQh/+ZjY="
+  [mod."github.com/andybalholm/brotli"]
+    version = "v1.1.0"
+    hash = "sha256-njLViV4v++ZdgOWGWzlvkefuFvA/nkugl3Ta/h1nu/0="
   [mod."github.com/aristanetworks/goeapi"]
     version = "v1.0.0"
     hash = "sha256-FrPjEAGJYzUUxhEpubMHpKJSbprjC/hkul8VnRVH54k="
@@ -16,6 +19,15 @@ schema = 3
   [mod."github.com/cespare/xxhash/v2"]
     version = "v2.3.0"
     hash = "sha256-7hRlwSR+fos1kx4VZmJ/7snR7zHh8ZFKX+qqqqGcQpY="
+  [mod."github.com/gofiber/contrib/fiberzerolog"]
+    version = "v1.0.2"
+    hash = "sha256-QeN9PLEM6CwmbTB59x4DDCDLAuMG9dpIT69pmhKMC+Q="
+  [mod."github.com/gofiber/fiber/v2"]
+    version = "v2.52.6"
+    hash = "sha256-IQE0BfWzzKdUpaWyUf/SW593424DUxKrlXna1UiQk9Q="
+  [mod."github.com/google/uuid"]
+    version = "v1.6.0"
+    hash = "sha256-VWl9sqUzdOuhW0KzQlv0gwwUQClYkmZwSydHG2sALYw="
   [mod."github.com/klauspost/compress"]
     version = "v1.17.11"
     hash = "sha256-LFSIWy0C4VbiuPve0eKHr7Q7s4XtaGzsZ3qpO+6bEgc="
@@ -23,8 +35,11 @@ schema = 3
     version = "v0.1.13"
     hash = "sha256-qb3Qbo0CELGRIzvw7NVM1g/aayaz4Tguppk9MD2/OI8="
   [mod."github.com/mattn/go-isatty"]
-    version = "v0.0.19"
-    hash = "sha256-wYQqGxeqV3Elkmn26Md8mKZ/viw598R4Ych3vtt72YE="
+    version = "v0.0.20"
+    hash = "sha256-qhw9hWtU5wnyFyuMbKx+7RB8ckQaFQ8D+8GKPkN3HHQ="
+  [mod."github.com/mattn/go-runewidth"]
+    version = "v0.0.16"
+    hash = "sha256-NC+ntvwIpqDNmXb7aixcg09il80ygq6JAnW0Gb5b/DQ="
   [mod."github.com/mitchellh/mapstructure"]
     version = "v1.5.0"
     hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="
@@ -43,9 +58,21 @@ schema = 3
   [mod."github.com/prometheus/procfs"]
     version = "v0.15.1"
     hash = "sha256-H+WXJemFFwdoglmD6p7JRjrJJZmIVAmJwYmLbZ8Q9sw="
+  [mod."github.com/rivo/uniseg"]
+    version = "v0.2.0"
+    hash = "sha256-GLj0jiGrT03Ept4V6FXCN1yeZ/b6PpS3MEXK6rYQ8Eg="
   [mod."github.com/rs/zerolog"]
     version = "v1.34.0"
     hash = "sha256-M503WwzPvqbOas3f70FQNXoWG17eV/XU6FubtB6P0uo="
+  [mod."github.com/valyala/bytebufferpool"]
+    version = "v1.0.0"
+    hash = "sha256-I9FPZ3kCNRB+o0dpMwBnwZ35Fj9+ThvITn8a3Jr8mAY="
+  [mod."github.com/valyala/fasthttp"]
+    version = "v1.51.0"
+    hash = "sha256-zABslQE2va3NNxqZK9Co2Z4Cu76qOa8yk+a5cJpK4gs="
+  [mod."github.com/valyala/tcplisten"]
+    version = "v1.0.0"
+    hash = "sha256-aP0CrNH6UNRMhzgA2NgPwKyZs6xry5aDlZnLgGuHZbs="
   [mod."github.com/vaughan0/go-ini"]
     version = "v0.0.0-20130923145212-a98ad7ee00ec"
     hash = "sha256-yjElTSfiuMNUYBL7ZInt6/XWidRclZlaAkDHz0bUMdA="
