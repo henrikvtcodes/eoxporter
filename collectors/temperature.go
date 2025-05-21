@@ -1,6 +1,9 @@
 package collectors
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/prometheus/client_golang/prometheus"
+	"strings"
+)
 
 type TemperatureCollector struct {
 	ShutdownOnOverheat bool                `json:"shutdownOnOverheat"`
@@ -46,7 +49,7 @@ func (c *TemperatureCollector) GetCmd() string {
 var tempOpts = MakeSubsystemOptsFactory("temperature")
 
 func (c *TemperatureCollector) Register(registry *prometheus.Registry) {
-	labels := []string{"sensorName", "sensorDescription"}
+	labels := []string{"sensorName", "sensorDescription", "sensorGroup"}
 	c.maxTempGauge = prometheus.NewGaugeVec(tempOpts("max_temp", "The highest temperature that this sensor has hit"), labels)
 	c.tempAlertCount = prometheus.NewGaugeVec(tempOpts("temp_alert", "Temperature Sensor Alert Count"), labels)
 	c.overheatThresholdTempGauge = prometheus.NewGaugeVec(tempOpts("overheat_threshold", "Overheat Temperature Threshold"), labels)
@@ -59,7 +62,15 @@ func (c *TemperatureCollector) Register(registry *prometheus.Registry) {
 
 func (c *TemperatureCollector) UpdateMetrics() {
 	for _, sensor := range c.TemperatureSensors {
-		labels := []string{sensor.Name, sensor.Description}
+		group := sensor.Description
+
+		if strings.HasPrefix(group, "Phy") {
+			group = "Phy"
+		} else if strings.HasPrefix(group, "Trident") {
+			group = "Trident"
+		}
+
+		labels := []string{sensor.Name, sensor.Description, group}
 		c.maxTempGauge.WithLabelValues(labels...).Set(sensor.MaxTemperature)
 		c.tempAlertCount.WithLabelValues(labels...).Set(float64(sensor.AlertCount))
 		c.overheatThresholdTempGauge.WithLabelValues(labels...).Set(float64(sensor.OverheatThreshold))
