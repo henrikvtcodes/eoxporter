@@ -57,7 +57,7 @@ func (c *CoolingCollector) Register(registry *prometheus.Registry) {
 	c.fanMaxSpeedGauge = prometheus.NewGaugeVec(coolingOpts("fan_max_speed", "Maximum capable fan speed"), labels)
 	c.fanConfiguredSpeedGauge = prometheus.NewGaugeVec(coolingOpts("fan_configured_speed", "Configured speed"), labels)
 	c.fanActualSpeedGauge = prometheus.NewGaugeVec(coolingOpts("fan_actual_speed", "Actual speed"), labels)
-	registry.MustRegister(c.fanMaxSpeedGauge)
+	registry.MustRegister(c.coolingMeta, c.ambientTemperature, c.fanMaxSpeedGauge, c.fanConfiguredSpeedGauge, c.fanActualSpeedGauge)
 }
 
 func (c *CoolingCollector) UpdateMetrics() {
