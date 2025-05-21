@@ -64,7 +64,7 @@ func (c *PowerCollector) Register(registry *prometheus.Registry) {
 		defaultLabels)
 
 	// Register all metrics
-	registry.MustRegister(c.psuMeta, c.psuUptime, c.psuInputCurrent, c.psuOutputCurrent, c.psuOutputPower)
+	registry.MustRegister(c.psuMeta, c.psuCapacity, c.psuUptime, c.psuInputCurrent, c.psuOutputCurrent, c.psuOutputPower)
 }
 
 func (c *PowerCollector) UpdateMetrics() {
