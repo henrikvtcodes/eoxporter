@@ -42,7 +42,7 @@ type FanStatus struct {
 }
 
 func (c *CoolingCollector) GetCmd() string {
-	return "show environment cooling"
+	return "show system environment cooling"
 }
 
 var coolingOpts = MakeSubsystemOptsFactory("cooling")
